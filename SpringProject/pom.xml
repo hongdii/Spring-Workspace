@@ -196,6 +196,21 @@
 		    <scope>provided</scope>
 		</dependency>
 		
+		<!-- JSTL -->
+		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version>
+		</dependency>
+		
+		<!-- taglibs -->
+		<!-- https://mvnrepository.com/artifact/taglibs/standard -->
+		<dependency>
+		    <groupId>taglibs</groupId>
+		    <artifactId>standard</artifactId>
+		    <version>1.1.2</version>
+		</dependency>
 		
 	</dependencies>
     <build>
