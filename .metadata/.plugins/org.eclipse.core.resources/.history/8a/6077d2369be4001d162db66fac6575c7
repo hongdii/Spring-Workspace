@@ -1,0 +1,15 @@
+package com.kh.spring.member.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller // 생성된 bean이 Controller임을 명시 + bean 등록
+@RequestMapping("/member")
+public class MemberController {
+	
+	public void test() {
+		
+	}
+	
+}
+

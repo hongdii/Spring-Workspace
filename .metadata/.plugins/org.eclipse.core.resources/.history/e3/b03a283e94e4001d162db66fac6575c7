@@ -1,0 +1,10 @@
+package com.kh.spring.main;
+
+public class MainController {
+
+	public String mainForward() {
+		
+		return "main";
+	}
+	
+}

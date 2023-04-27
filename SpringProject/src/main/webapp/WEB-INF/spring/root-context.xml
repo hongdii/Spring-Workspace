@@ -15,7 +15,7 @@
 	 
 	 <!-- DB연결 설정(3단계) -->
 	 <!-- 1단계 DB연결을 위한 도구 설정 -->
-	 <bean class="org.apache.commons.dbcp.BasicDataSource" id="basicDataSource" destroy-method="close" >
+	 <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close" >
 	 	
 	 	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
 	 	<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>

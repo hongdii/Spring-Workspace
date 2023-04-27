@@ -4,7 +4,7 @@
 	<settings>
 		<setting name="jdbcTypeForNull" value="NULL"/>
 		
-		<setting name="LogImpl" value="LOG4J"/>
+		<setting name="logImpl" value="LOG4J"/>
 		<!-- 
 			마이바티스의 쿼리문, 파라미터값, 실행결과를 로그를 통해 확인하기 위한 설정 정보
 			(실제 운영환경에서는 빼야함)
@@ -13,7 +13,7 @@
 	</settings>
 	
 	<typeAliases>
-		<typeAlias type="com.kh.spring.member.model.vo.member" alias="member"/>
+		<typeAlias type="com.kh.spring.member.model.vo.Member" alias="member"/>
 	</typeAliases>
 	
 	<!-- 
