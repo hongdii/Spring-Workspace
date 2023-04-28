@@ -1,5 +1,7 @@
 package com.kh.spring.member.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,16 +18,19 @@ public class MemberServiceImpl implements MemberService{
 	 * private MemberController memberController;
 	 */
 	
-	@Autowired // bean으로 등록된 객체중 같은 타입이 있을 경우 의존성(객체)을 주입해줌(DI)
+	@Autowired // bean(spring 컨테이너가 관리하는 자바 객체)으로 등록된 객체중 같은 타입이 있을 경우 의존성(객체)을 주입해줌(DI)
 	private MemberDao memberDao;
 	
-	@Autowired
-	private SqlSessionTemplate sqlSession;
+	/*
+	 * @Autowired private SqlSessionTemplate sqlSession;
+	 * 
+	 * sqlSession객체를 Dao에서 관리. 효율성 증가
+	 */
 	
 	@Override
 	public Member loginMember(Member inputMember) {
 		
-		Member loginUser = memberDao.loginMember(sqlSession, inputMember);
+		Member loginUser = memberDao.loginMember(inputMember);
 		/*
 		 * SqlSessionTemplate 객체를 bean으로 등록한 후 부터는 스프링 컨테이너가 자원 사용후
 		 * 자동으로 반납을 해주기 때문에 close()할 필요가 없다
@@ -35,6 +40,18 @@ public class MemberServiceImpl implements MemberService{
 		return loginUser;
 	}
 	
+	@Override
+	public int insertMember(Member inputMember) {
+		int result = memberDao.insertMember(inputMember);
+		
+		return result;
+	}
 	
+	@Override
+	public ArrayList<Member> selectAll(){
+		
+		ArrayList<Member> list = memberDao.selectAll();
+		return list;
+	}
 
 }
