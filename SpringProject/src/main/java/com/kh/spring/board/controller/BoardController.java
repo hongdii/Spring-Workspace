@@ -74,7 +74,7 @@ public class BoardController {
 	public String boardDetail(@PathVariable("boardCode") String boardCode,
 								@PathVariable("boardNo") int boardNo,
 								@RequestParam(value="cpage", required=false, defaultValue = "1") int cp,
-								Model model,
+								Model model, // MODEL은 request나 session값을 저장할때 사용함
 								HttpSession session,
 								HttpServletRequest req, HttpServletResponse resp) {
 	
