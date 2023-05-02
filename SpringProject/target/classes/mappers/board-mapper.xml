@@ -52,7 +52,7 @@
 <resultMap id="boardImgResultSet" type="boardImg">
 	<result column="BOARD_IMG_NO" property="boardImgNo"/>
 	<result column="ORIGIN_NAME" property="originName"/>
-	<result column="CHANGE_NAME" property="changName"/>
+	<result column="CHANGE_NAME" property="changeName"/>
 	<result column="REF_BNO" property="refBno"/>
 	<result column="IMG_LEVEL" property="imgLevel"/>
 	
@@ -72,10 +72,32 @@
 	ORDER BY BOARD_CD
 </select>	
 	
-<select id="selectBoardListCount" resultType="int">
+<select id="selectBoardListCount" parameterType="map" resultType="int">
 	SELECT COUNT(*)
-	FROM BOARD
-	WHERE BOARD_CD = #{boardCode} AND STATUS = 'Y'
+	FROM BOARD B
+	LEFT JOIN MEMBER M ON USER_NO = BOARD_WRITER
+	WHERE BOARD_CD = #{boardCode} 
+	AND B.STATUS = 'Y'
+	<if test="keyword != null and keyword != '' ">
+		<bind name="pattern" value="'%'+ _parameter.get('keyword') + '%'"/>
+		AND
+		<if test="condition == 'writer' ">
+			 M.NICK_NAME LIKE #{pattern}
+		</if>
+		<if test="condition == 'title' ">
+		 	BOARD_TITLE LIKE #{pattern}
+		</if>
+		<if test="condition == 'content' ">
+			BOARD_CONTENT LIKE #{pattern}
+		</if>
+		<if test="condition == 'titleAndContent' ">
+			(
+				BOARD_TITLE LIKE #{pattern}
+				OR
+				BOARD_CONTENT LIKE #{pattern}
+			)
+		</if>
+	</if>
 </select>	
 
 <select id="selectBoardList" resultMap="boardResultSet">
@@ -94,6 +116,49 @@
 	FROM BOARD B
 	JOIN MEMBER ON USER_NO = BOARD_WRITER
 	WHERE B.STATUS = 'Y' AND BOARD_CD = #{boardCode}
+	ORDER BY B.CREATE_DATE DESC
+</select>
+
+<select id="selectBoardKeywordList" parameterType="map" resultMap="boardResultSet">
+	
+	SELECT BOARD_NO, 
+			BOARD_TITLE,
+			BOARD_WRITER,
+			
+			NICK_NAME, 
+			COUNT, 
+			CREATE_DATE,
+			(
+				SELECT CHANGE_NAME 
+				FROM BOARD_IMG
+				WHERE BOARD_NO = REF_BNO AND IMG_LEVEL = 0 
+			) THUMBNAIL
+	FROM BOARD B
+	<!-- left join으로 오류막기 -->
+	LEFT JOIN MEMBER M ON USER_NO = BOARD_WRITER
+	WHERE B.STATUS = 'Y' AND BOARD_CD = #{boardCode}
+	
+	<if test="keyword != null and keyword != '' ">
+		<bind name="pattern" value="'%'+ _parameter.get('keyword') + '%'"/>
+		AND
+		<if test="condition == 'writer' ">
+			 M.NICK_NAME LIKE #{pattern}
+		</if>
+		<if test="condition == 'title' ">
+		 	BOARD_TITLE LIKE #{pattern}
+		</if>
+		<if test="condition == 'content' ">
+			BOARD_CONTENT LIKE #{pattern}
+		</if>
+		<if test="condition == 'titleAndContent' ">
+			(
+				BOARD_TITLE LIKE #{pattern}
+				OR
+				BOARD_CONTENT LIKE #{pattern}
+			)
+		</if>
+	</if>
+	<!-- CONCAT() 사용도 가능 -->
 	ORDER BY B.CREATE_DATE DESC
 </select>
 
@@ -119,5 +184,87 @@
 	SET COUNT = COUNT+1
 	WHERE BOARD_NO = #{boardNo}
 </update>
+
+<insert id="insertBoard" useGeneratedKeys="true" parameterType="board">
+
+	<selectKey keyProperty="boardNo" resultType="_int" order="BEFORE">
+		SELECT SEQ_BNO.NEXTVAL FROM DUAL
+	</selectKey>
+
+	INSERT INTO BOARD(
+		BOARD_NO,
+		BOARD_TITLE,
+		BOARD_WRITER,
+		BOARD_CONTENT,
+		BOARD_CD
+	) VALUES ( 
+		#{boardNo},
+		#{boardTitle},
+		#{boardWriter},
+		#{boardContent},
+		#{boardCd}
+	)
+</insert>
+
+<insert id="insertBoardImgList" parameterType="List">
+	INSERT INTO BOARD_IMG
+	SELECT SEQ_IMG_NO.NEXTVAL AS IMG_NO, C.* FROM
+	(
+		<foreach collection="list" item="img" separator="UNION ALL">
+			SELECT 
+				#{img.originName} as ORIGIN_NAME,
+				#{img.changeName} as CHANGE_NAME,
+				#{img.refBno} as REF_BNO,
+				#{img.imgLevel} as IMG_LEVEL
+			FROM DUAL
+		</foreach>
+	) C 
+	
+	<!-- inner table -->
+	
+	
+</insert>
+
+<!-- 게시글 수정 -->
+<update id="updateBoard" parameterType="board">
+	UPDATE BOARD 
+	SET BOARD_TITLE = #{boardTitle},
+	BOARD_CONTENT = #{boardContent}
+	WHERE BOARD_NO = #{boardNo}
+</update>
+
+<!-- 게시글 이미지 수정하는 부분(1개 단위로 수정) -->
+<update id="updateBoardImg" parameterType="boardImg">
+	UPDATE BOARD_IMG
+	SET ORIGIN_NAME = #{originName},
+	CHANGE_NAME = #{changeName}
+	WHERE REF_BNO = #{refBno} AND IMG_LEVEL = #{imgLevel}
+</update>
+
+<insert id="insertBoardImg" parameterType="boardImg">
+	INSERT INTO BOARD_IMG
+	VALUES(
+		SEQ_IMG_NO.NEXTVAL,
+		#{originName},
+		#{changeName},
+		#{refBno},
+		#{imgLevel}
+	)
+</insert>
+
+<delete id="deleteBoardImage" parameterType="map">
+	DELETE FROM BOARD_IMG
+	WHERE REF_BNO = #{boardNo}
+	AND IMG_LEVEL IN (
+		${deleteList} <!-- 0,1,2,3 -->
+	)
+</delete>
+
+
+
+
+
+
+
 
 </mapper>

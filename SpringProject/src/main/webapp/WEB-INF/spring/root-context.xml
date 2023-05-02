@@ -18,7 +18,7 @@
 	 <!-- DB연결 설정(3단계) -->
 	 <!-- 1단계 DB연결을 위한 도구 설정 -->
 	 <!-- Member m = new Member(); == BasicDataSource dataSource = new BasicDataSource(); -->
-	 <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close" >
+	 <bean class="org.apache.commons.dbcp.BasicDataSource" id="realDataSource" destroy-method="close" >
 	 	
 	 	<!-- 필드안에 밸류로 값을 넣겠다 -->
 	 	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
@@ -36,6 +36,23 @@
 	 	<property name="maxIdle" value="20"/> <!-- 유효 상태로 존재할 수 있는 커넥션 최대수, 기본 8 -->
 	 	<property name="maxWait" value="-1"/> <!-- 예외 발생전 커넥션이 반환될때까지 대기하는시간, 기본값 = -1(무기한) -->
 	 	
+	 </bean>
+	 
+	 <!-- 
+	 	log4j를 이용한 SQL로그 출력용 BEAN생성
+	 	
+	 	* readDataSource이용해서 SQL수행 내용 , 수행결과를 출력하는 역할
+	  -->
+	 <bean id="dataSource" class="net.sf.log4jdbc.log4jdbcProxyDataSource">
+		
+		<constructor-arg ref="realDataSource" />
+	
+		<property name="logFormatter">
+			<bean class="net.sf.log4jdbc.tools.log4JdbcCustomFormatter">
+				<property name="loggingType" value="MULTI_LINE"/>
+				<property name="sqlPrefix" value="[SQL]"/>
+			</bean>
+		</property>
 	 </bean>
 	 
 	 <!-- 
@@ -91,4 +108,22 @@
 			<property name="dataSource" ref="dataSource"></property>
 		</bean>
 
+		<!-- 파일 용량과 인코딩 설정을 도와줌 -->
+		<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+			<!-- defaultEncoding : 업로드 되는 파일에 대한 인코딩 처리 여부 -->
+			<property name="defaultEncoding" value="UTF-8"/>
+			
+			<!-- 
+				maxUploadSize : 한번에 전체 업로드 되는 파일의 총 용량 설정
+			 -->
+			 <property name="maxUploadSize" value="10000000"/> <!-- 10mbyte -->
+			 
+			 <!-- 
+			 	maxInMemorySize : 디스크에 임시파일을 생성하기전에 메모리에 보관할 수 있는 최대바이트 크기
+			  -->
+			 <property name="maxInMemorySize" value="10000000"/>
+		</bean>
+		
+		
+		
 </beans>
