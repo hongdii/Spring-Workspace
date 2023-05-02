@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="readBoardNo"/>
+		<item key="selection" value="sql-console"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="sql-console"/>
+			<item value="&lt;appender name=&quot;sql-console&quot; class=&quot;org.apache.log4j.ConsoleAppender&quot;&gt;"/>
+			<item value="l"/>
+			<item value="log4j"/>
+			<item value="ref_bno"/>
+			<item value="TITLE"/>
+			<item value="changeName"/>
+			<item value="changName"/>
+			<item value="&apos;changName"/>
+			<item value="boardImageList"/>
+			<item value="insertBoardImgList"/>
+			<item value="NICK_NAME"/>
+			<item value="selectBoardKeywordList"/>
+			<item value="selectBoardList"/>
 			<item value="readBoardNo"/>
-			<item value="list-thumbnail"/>
-			<item value="b.thumbnail"/>
-			<item value="boardList"/>
-			<item value="boardNo"/>
-			<item value="nth-of-type"/>
-			<item value="text"/>
-			<item value="select"/>
-			<item value="searchForm"/>
-			<item value="pagingArea"/>
-			<item value="boardNm"/>
-			<item value=".table"/>
-			<item value="table"/>
-			<item value="org.apache.maven.plugins"/>
-			<item value="조회"/>
 		</list>
 		<list key="replacehistory">
 			<item value="${contextPath }"/>
