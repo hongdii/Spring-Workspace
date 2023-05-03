@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -241,6 +242,13 @@ public class MemberController {
 		 * 암호화 작업을 하면 입력받은 비밀번호는 펑문이지만 디비에 등록된 비밀번호는 암호문이기 때문에 비교시 무조건 다르게 나옴
 		 * 아이디로 먼저 회원정보 조회 후 회원이 있으면 비밀번호 암호문 비교 메소드를 이용해서 일치하는지 확인
 		 */
+		
+		/* 예외 강제 발생
+		 * if(true) { 
+		 * throw new RuntimeException(); 
+		 * }
+		 */
+		
 		Member loginUser = memberService.loginMember(m);
 		// loginUser : 아이디 + 비밀번호로 조회한 회원정보 -----> 아이디로만 조회
 		// loginUser안의 userPwd : 암호화된 비밀번호
@@ -375,9 +383,27 @@ public class MemberController {
 		return new Gson().toJson(list);
 
 	}
+	
+	/*
+	 * 스프링 예외 처리 방법(3가지, 중복 사용가능)
+	 * 
+	 * 1 순위 : 메서드 별로 예외처리(try/catch, throws)
+	 * 
+	 * 2 순위 : 하나의 컨트롤러에서 발생하는 예외를 싹 모아서 처리 -> @ExceptionHandler
+	 * 
+	 * 3 순위 : 웹 애플리케이션 전역에서 발생하는 예외를 다 모아서 처리 -> @ControllerAdvice
+	 */
 
-
-
+	@ExceptionHandler(Exception.class)
+	public String exceptionHandler(Exception e, Model model) {
+		e.printStackTrace();
+		
+		model.addAttribute("errorMsg","서비스 이용중 문제가 발생했습니다.");
+		model.addAttribute("e", e);
+		
+		return "common/errorPage";
+	}
+	
 
 
 

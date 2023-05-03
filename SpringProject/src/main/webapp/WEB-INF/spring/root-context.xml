@@ -42,18 +42,17 @@
 	 	log4j를 이용한 SQL로그 출력용 BEAN생성
 	 	
 	 	* readDataSource이용해서 SQL수행 내용 , 수행결과를 출력하는 역할
-	  -->
-	 <bean id="dataSource" class="net.sf.log4jdbc.log4jdbcProxyDataSource">
-		
-		<constructor-arg ref="realDataSource" />
-	
-		<property name="logFormatter">
-			<bean class="net.sf.log4jdbc.tools.log4JdbcCustomFormatter">
-				<property name="loggingType" value="MULTI_LINE"/>
-				<property name="sqlPrefix" value="[SQL]"/>
-			</bean>
-		</property>
-	 </bean>
+	-->
+		 <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		       <constructor-arg ref="realDataSource"/>
+		       
+		       <property name="logFormatter">
+		          <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+		             <property name="loggingType" value="MULTI_LINE" />
+		             <property name="sqlPrefix" value="[SQL]" />
+		          </bean>
+		       </property>
+	    </bean>
 	 
 	 <!-- 
 	 	BasicDataSource dataSource = new BasicDataSource();
