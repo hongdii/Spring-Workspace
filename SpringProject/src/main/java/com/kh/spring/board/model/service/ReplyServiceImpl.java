@@ -21,5 +21,4 @@ public class ReplyServiceImpl implements ReplyService{
 	public List<Reply> selectReplyList(int bno){
 		return dao.selectReplyList(bno);
 	}
-	
 }

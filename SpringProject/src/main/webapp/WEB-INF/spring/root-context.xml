@@ -103,7 +103,7 @@
 		 -->
 
 		<!-- 스프링에서 사용하는 proxy를 이용한 트랜잭션제어가 안먹힐 경우 트랜잭션 매니저를 추가 -->
-		<bean id="transactionalManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 			<property name="dataSource" ref="dataSource"></property>
 		</bean>
 

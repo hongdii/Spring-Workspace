@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="sql-console"/>
+		<item key="selection" value=""/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="1) 게시판 이름"/>
+			<item value="true"/>
+			<item value="&quot;common/error"/>
+			<item value="암호화 후"/>
+			<item value="selectChatRoomList"/>
+			<item value="chatRoom"/>
+			<item value="insertReply"/>
+			<item value="info"/>
 			<item value="sql-console"/>
 			<item value="&lt;appender name=&quot;sql-console&quot; class=&quot;org.apache.log4j.ConsoleAppender&quot;&gt;"/>
 			<item value="l"/>
@@ -15,14 +23,6 @@
 			<item value="ref_bno"/>
 			<item value="TITLE"/>
 			<item value="changeName"/>
-			<item value="changName"/>
-			<item value="&apos;changName"/>
-			<item value="boardImageList"/>
-			<item value="insertBoardImgList"/>
-			<item value="NICK_NAME"/>
-			<item value="selectBoardKeywordList"/>
-			<item value="selectBoardList"/>
-			<item value="readBoardNo"/>
 		</list>
 		<list key="replacehistory">
 			<item value="${contextPath }"/>
