@@ -43,6 +43,7 @@
 			DEFAULT, 
 			DEFAULT, 
 			NULL, 
+			DEFAULT,
 			DEFAULT	
 		)
 	</insert>
