@@ -7,13 +7,13 @@ import com.kh.spring.common.model.vo.PageInfo;
 
 @Component
 public class Pagination {
-
+	
 	@Autowired
 	private PageInfo pageinfo;
 	
-	public PageInfo getPageInfo(int listCount , int currentPage, int pageLimit, int boardLimit) {
+	public PageInfo getPageInfo(int listCount, int currentPage, int pageLimit, int boardLimit) {
 		int maxPage = (int)Math.ceil((double)listCount/boardLimit);
-		int startPage  =(currentPage -1) / pageLimit*pageLimit+1;
+		int startPage = (currentPage -1) / pageLimit* pageLimit +1;
 		int endPage = startPage+pageLimit -1;
 		
 		if(endPage> maxPage) {
@@ -21,7 +21,7 @@ public class Pagination {
 		}
 		
 		pageinfo.setBoardLimit(boardLimit);
-		pageinfo.setCurrentPage(currentPage);;
+		pageinfo.setCurrentPage(currentPage);
 		pageinfo.setEndPage(endPage);
 		pageinfo.setListCount(listCount);
 		pageinfo.setMaxPage(maxPage);
@@ -30,4 +30,11 @@ public class Pagination {
 		
 		return pageinfo;
 	}
+	
+	
+	
+	
+	
+	
+	
 }

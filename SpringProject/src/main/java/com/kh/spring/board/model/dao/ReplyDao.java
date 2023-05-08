@@ -8,17 +8,30 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.spring.board.model.vo.Reply;
 
-@Repository // 있어야 빈객체로 등록
-public class ReplyDao {
+@Repository
+public class ReplyDAO {
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
 	public int insertReply(Reply reply) {
-		return sqlSession.insert("replyMapper.insertReply" ,reply);
+		return sqlSession.insert("replyMapper.insertReply",reply);
 	}
-
+	
 	public List<Reply> selectReplyList(int bno){
-		return sqlSession.selectList("replyMapper.selectReplyList", bno);
+		return sqlSession.selectList("replyMapper.selectReplyList",bno);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 }

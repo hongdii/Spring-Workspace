@@ -71,86 +71,99 @@
 </style>
 </head>
 <body>
+
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-   
-   <div class="chatting-area">
-      <div id="exit-area">
-         <button class="btn btn-outline-danger" id="exit-btn">나가기</button>
-      </div>
-      <ul class="display-chatting">
-         <c:forEach items="${list}" var="msg">
-            <fmt:formatDate var="chatDate" value="${msg.createDate }" pattern="yyyy년 MM월 dd일 HH:mm:ss"/>
-            <c:if test="${msg.userNo == loginUser.userNo }">
-               <li class="myChat">
-                  <span class="chatDate">${chatDate}</span>
-                  <p class="chat">${msg.message }</p>
-               </li>
-            </c:if>
-            
-            <c:if test="${msg.userNo != loginUser.userNo }">
-               <li>
-                  <b>${msg.nickName }</b>   <br>
-                  <p class="chat">${msg.message }</p>
-                  <span class="chatDate">${chatDate}</span>
-               </li>
-            </c:if>
-         
-         </c:forEach>
-      
-      
-         
-         
-      </ul>
-      
-      <div class="input-area">
-         <textarea id="inputChatting" row="3"></textarea>
-         <button id="send">보내기</button>
-      </div>
-   </div>
-   <!-- sockjs를 이용한 WebSocket 라이브러리 추가 -->
-   
-   <!-- sockjs-client용 -->
-   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-   
-   <script>
-    	const userNo = '${loginUser.userNo}';
-    	const userId = '${loginUser.userId}';
-    	const nickName = '${loginUser.nickName}';
-    	const chatRoomNo = '${chatRoomNo}';
-    	const contextPath = '${contextPath}';
-   	
-    	// /chat이라는 요청주소로 통신할 수 있는 WebSocket객체 생성
-    	let chattingSock = new SockJS(contextPath+"/chat");
-    	// webSocket프로토콜을 이용해서 해당 주소로 데이터를 송/수신 할수 있음.
-    	
-    	let exitBtn = document.querySelector("#exit-btn");
-    	
-    	exitBtn.addEventListener("click", exitChatRoom);
-    	
-    	function exitChatRoom(){
-    		if(confirm("채팅방에서 나가시겠습니까?")){
-    			$.ajax({
-    				url : "${contextPath}/chat/exit",
-    				data : {
-    					chatRoomNo
-    				},
-    				success : function(result){
-    					// result == 1 나가기 성공
-    					if(result == 1){
-    						location.href="${contextPath}/chat/chatRoomList";
-    					}else{
-    						alert("채팅방 나가기에 실패했습니다.");
-    					}
-    					// result == 0 실패
-    				}
-    			})	
-    		}
-    	}
-    </script>
-   
-   <script src="${contextPath }/resources/js/chat/chat.js"></script>
-   <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+	
+	<div class="chatting-area">
+		<div id="exit-area">
+			<button class="btn btn-outline-danger" id="exit-btn">나가기</button>
+		</div>
+		<ul class="display-chatting">
+			<c:forEach items="${list}" var="msg">
+				<fmt:formatDate var="chatDate" value="${msg.createDate }" pattern="yyyy년 MM월 dd일 HH:mm:ss"/>
+				<c:if test="${msg.userNo == loginUser.userNo }">
+					<li class="myChat">
+						<span class="chatDate">${chatDate}</span>
+						<p class="chat">${msg.message }</p>
+					</li>
+				</c:if>
+				
+				<c:if test="${msg.userNo != loginUser.userNo }">
+					<li>
+						<b>${msg.nickName }</b>	<br>
+						<p class="chat">${msg.message }</p>
+						<span class="chatDate">${chatDate}</span>
+					</li>
+				</c:if>
+			
+			</c:forEach>
+			
+		</ul>
+		
+		<div class="input-area">
+			<textarea id="inputChatting" row="3"></textarea>
+			<button id="send">보내기</button>
+		</div>
+	</div>
+	<!-- sockjs를 이용한 WebSocket 라이브러리 추가 -->
+
+	<!--  sockjs-client용 -->
+	<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+	
+	<script>
+		const userNo = '${loginUser.userNo}';
+		const userId = '${loginUser.userId}';
+		const nickName = '${loginUser.nickName}';
+		const chatRoomNo = '${chatRoomNo}';
+		const contextPath = '${contextPath}';
+		
+		// /chat이라는 요청주소로 통신할수 있는 WebSocket객체 생성
+		let chattingSock = new SockJS(contextPath+"/chat");
+		// websocket프로토콜을 이용해서 해당 주소로 데이터를 송/수신 할수 있음.
+		
+		let exitBtn = document.querySelector("#exit-btn");
+		
+		exitBtn.addEventListener("click", exitChatRoom);
+		
+		function exitChatRoom(){
+			if(confirm("채팅방에서 나가시겠습니까?")){
+				
+				$.ajax({
+					url : "${contextPath}/chat/exit",
+					data : {
+						chatRoomNo
+					},
+					success : function(result){
+						// result == 1 나가기 성공
+						if(result == 1){
+							location.href = "${contextPath}/chat/chatRoomList";
+						}else{
+							alert("채팅방 나가기에 실패했습니다.");
+						}
+						// result == 0 실패
+					}
+				})
+				
+				
+			}
+		}
+		
+	</script>
+
+	<script src="${contextPath }/resources/js/chat/chat.js"></script>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
 </body>
-
-
 </html>

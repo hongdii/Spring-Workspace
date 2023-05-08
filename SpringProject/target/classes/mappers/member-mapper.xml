@@ -4,57 +4,69 @@
 	<resultMap type="member" id="memberResultSet">
 		<id column="USER_NO" property="userNo"/>
 		<result column="USER_ID" property="userId"/>
-		<result column="USER_PWD" property="userPwd" />
-		<result column="NICK_NAME" property="nickName"/>
+		<result column="USER_PWD" property="userPwd"/>
+		<result column="NICK_NAME" property="nickName" />
 		<result column="PROFILE_IMG" property="profileImage"/>
 		<result column="PHONE" property="phone"/>
 		<result column="ADDRESS" property="address"/>
 		<result column="ENROLL_DATE" property="enrollDate"/>
 		<result column="MODIFY_DATE" property="modifyDate"/>
-		<result column="STATUS" property="status"/>
+		<result column="STATUS" property="status"/>		
 	</resultMap>
-	
+
 	<!-- 로그인 -->
 	<!-- 
 		조회되는 행의 개수 : 1행
 		파라미터 타입 : member
 		조회되는 타입 : member
 	 -->
-	
+
 	<select id="loginMember" parameterType="member" resultMap="memberResultSet">
 		SELECT * 
-		FROM MEMBER 
+		FROM MEMBER
 		WHERE USER_ID = #{userId} AND
-			<!-- USER_PWD = #{userPwd} AND -->
-			STATUS = 'Y'
+		      <!-- USER_PWD = #{userPwd} AND -->
+		      STATUS = 'Y'
 	</select>
 	
 	<insert id="insertMember" parameterType="member">
 		
 		INSERT INTO MEMBER
-		VALUES(SEQ_UNO.NEXTVAL,
-				#{userId},
-				#{userPwd},
-				#{nickName},
-				#{phone},
-				#{address},
-				DEFAULT, 
-				DEFAULT, 
-				NULL, 
-				DEFAULT
-			   )	
+		VALUES
+		(
+			SEQ_UNO.NEXTVAL,
+			#{userId},
+			#{userPwd},
+			#{nickName},
+			#{phone},
+			#{address},
+			DEFAULT, 
+			DEFAULT, 
+			NULL, 
+			DEFAULT	
+		)
 	</insert>
-	
+
 	<select id="selectAll" resultMap="memberResultSet">
 		SELECT *
 		FROM MEMBER
-		WHERE STATUS = 'Y'
+		WHERE STATUS='Y'
 	</select>
 	
 	<update id="updateMemberChangePwd">
 		UPDATE MEMBER
 		SET CHANGE_PWD = 'Y'
-		<![CDATA[WHERE ADD_MONTHS(MODIFY_DATE, 3) < SYSDATE]]>
+		<![CDATA[WHERE ADD_MONTHS(MODIFY_DATE , 3) < SYSDATE]]>
 	</update>
-	
+
+
+
+
+
+
+
+
+
+
+
 </mapper>

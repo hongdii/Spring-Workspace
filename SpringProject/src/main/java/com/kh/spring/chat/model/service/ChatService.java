@@ -13,8 +13,19 @@ public interface ChatService {
 	int openChatRoom(ChatRoom cr);
 	
 	List<ChatMessage> joinChatRoom(ChatRoomJoin crj);
-
+	
 	int insertMessage(ChatMessage cm);
-
+	
 	int exitChatRoom(ChatRoomJoin crj);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

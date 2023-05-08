@@ -1,56 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="boardMapper">
-	
+
 <resultMap type="boardType" id="boardTypeResultSet">
 	<id column="BOARD_CD" property="boardCd"/>
 	<result column="BOARD_NAME" property="boardName"/>
 </resultMap>
 
-<!-- 게시글 목록용 resultMap -->
+<!--  게시글 목록용 resultMap -->
 <resultMap type="board" id="boardResultSet">
-	<result column="BOARD_NO" property="boardNo"/>
-	<result column="BOARD_TITLE" property="boardTitle" />
-	<result column="BOARD_WRITER" property="boardWriter" />
-	<result column="NICK_NAME" property="nickName" />
-	<result column="COUNT" property="count" />
-	<result column="CREATE_DATE" property="createDate" />
-	<result column="BOARD_CD" property="boardCd" />
-	<result column="THUMBNAIL" property="thumbnail" />
+	<result column="BOARD_NO" property="boardNo" />
+	<result column="BOARD_TITLE" property="boardTitle"/>
+	<result column="BOARD_WRITER" property="boardWriter"/>
+	<result column="NICK_NAME" property="nickName"/>
+	<result column="COUNT" property="count"/>
+	<result column="CREATE_DATE" property="createDate"/>
+	<result column="BOARD_CD" property="boardCd"/>
+	<result column="THUMBNAIL" property="thumbnail"/>
 </resultMap>
 
-<!-- 게시글 상세 조회용 resultMap -->	
+<!-- 게시글 상세 조회용 resultMap -->
 <resultMap type="board" id="boardDetailResultSet">
-	<result column="BOARD_NO" property="boardNo"/>
-	<result column="BOARD_TITLE" property="boardTitle" />
-	<result column="BOARD_WRITER" property="boardWriter" />
-	<result column="NICK_NAME" property="nickName" />
-	<result column="COUNT" property="count" />
-	<result column="CREATE_DATE" property="createDate" />
+	<result column="BOARD_NO" property="boardNo" />
+	<result column="BOARD_TITLE" property="boardTitle"/>	
+	<result column="BOARD_WRITER" property="boardWriter"/>
+	<result column="NICK_NAME" property="nickName"/>
+	<result column="COUNT" property="count"/>
+	<result column="CREATE_DATE" property="createDate"/>
 	<result column="BOARD_CONTENT" property="boardContent"/>
-	<result column="USER_NO" property="userNo" />
+	<result column="USER_NO" property="userNo"/>
 	<result column="PROFILE_IMG" property="profileImage"/>
 	
-	<!-- 방법1 -->
+	<!-- 방법 1 -->
 	<!-- <collection property="imgList" javaType="java.util.ArrayList" ofType="boardImg" 
-		select="selectImgList" column="BOARD_NO" />
- -->	<!-- 
-		selectImgList의 조회결과를 Board VO 클래스의 imgList필드에 담겠다. 라는 의미
+	   select="selectImgList" column="BOARD_NO"/>
+	    -->
+	<!-- 방법 2 -->
+	<collection property="imgList" resultMap="boardImgResultSet" />
+	<!-- 
+		selectImgList의 조회결과를 Board VO클래스의 imgList필드에 담겠다 라는 의미
 		
 		-> imgList에 담기위한 ArrayList<BoardImg>객체를 생성하겠다.
-			(javaType -> ArrayList , ofType(제네틱) => BoardImg)
-			
-		-> selectImgList 태그 수행시 필요한 파라미터는 현재 resultMap의 BOARD_NO 칼럼에 저장된 값을 전달하겠다.
-		->즉, resultMap에 한번 수행된 후 다시한번 수행됨
+		   (javaType -> ArrayList , ofType(제네릭) => BoardImg)
+		
+		-> selectImgList태그 수행시 필요한 파라미터는 현재 resultMap의 BOARD_NO컬럼에 저장된 값을 전달하겠다.
+		-> 즉, resultMap이 한번 수행된후 다시한번 수행됨
 		
 		게시글 상세 조회 후 BoardDetailResultSet이 호출되었을때 상세 조회 결과 중 BOARD_NO를 이용해서 selectImgList를
 		수행하고 결과를 imgList필드에 세팅하겠다.
-		
 	 -->
-	
-	<!-- 방법2 -->
-	<collection property="imgList" resultMap="boardImgResultSet"/>
-	
 </resultMap>
 
 <resultMap id="boardImgResultSet" type="boardImg">
@@ -58,8 +56,7 @@
 	<result column="ORIGIN_NAME" property="originName"/>
 	<result column="CHANGE_NAME" property="changeName"/>
 	<result column="REF_BNO" property="refBno"/>
-	<result column="IMG_LEVEL" property="imgLevel"/>
-	
+	<result property="imgLevel" column="IMG_LEVEL"/>
 </resultMap>
 
 <select id="selectImgList" resultMap="boardImgResultSet">
@@ -69,178 +66,184 @@
 	ORDER BY IMG_LEVEL
 </select>
 
+
 <select id="selectBoardTypeList" resultMap="boardTypeResultSet">
 	SELECT *
 	FROM BOARD_TYPE
-	ORDER BY BOARD_CD
-</select>	
-	
-<select id="selectBoardListCount" parameterType="map" resultType="int">
+	ORDER BY BOARD_CD 
+</select>
+
+<select id="selectBoardListCount" resultType="_int">
+	SELECT COUNT(*)
+	FROM BOARD
+	WHERE BOARD_CD = #{boardCode} AND STATUS = 'Y'
+</select>
+
+<select id="searchBoardListCount" resultType="_int">
 	SELECT COUNT(*)
 	FROM BOARD B
-	LEFT JOIN MEMBER M ON USER_NO = BOARD_WRITER
-	WHERE BOARD_CD = #{boardCode} 
-	AND B.STATUS = 'Y'
-	<if test="keyword != null and keyword != '' ">
-		<bind name="pattern" value="'%'+ _parameter.get('keyword') + '%'"/>
-		AND
-		<if test="condition == 'writer' ">
-			 M.NICK_NAME LIKE #{pattern}
-		</if>
-		<if test="condition == 'title' ">
-		 	BOARD_TITLE LIKE #{pattern}
-		</if>
-		<if test="condition == 'content' ">
-			BOARD_CONTENT LIKE #{pattern}
-		</if>
-		<if test="condition == 'titleAndContent' ">
-			(
-				BOARD_TITLE LIKE #{pattern}
-				OR
-				BOARD_CONTENT LIKE #{pattern}
-			)
-		</if>
-	</if>
-</select>	
+	LEFT JOIN MEMBER M ON (BOARD_WRITER = USER_NO)
+	WHERE BOARD_CD = #{boardCode} AND B.STATUS = 'Y'
+	
+	<if test='keyword != null and keyword != ""'>
+		AND 
+		<choose>
+			<when test='condition == "writer"'>
+				NICK_NAME LIKE '%' || #{keyword} || '%'
+			</when>
+			<when test='condition == "title"'>
+				BOARD_TITLE LIKE CONCAT(CONCAT('%',#{keyword}),'%')
+			</when>
+			<when test='condition == "content"'>
+				BOARD_CONTENT LIKE '%${keyword}%'
+			</when>			
+			<when test='condition == "titleAndContent"'>
+				(
+					BOARD_TITLE LIKE CONCAT(CONCAT('%',#{keyword}),'%') 
+					OR
+					BOARD_CONTENT LIKE '%${keyword}%'
+				)
+			</when>			
+		</choose>	
+	</if>	
+</select>
+
 
 <select id="selectBoardList" resultMap="boardResultSet">
-	SELECT BOARD_NO, 
-			BOARD_TITLE,
-			BOARD_WRITER,
-			
-			NICK_NAME, 
-			COUNT, 
-			CREATE_DATE,
-			(
-				SELECT CHANGE_NAME 
-				FROM BOARD_IMG
-				WHERE BOARD_NO = REF_BNO AND IMG_LEVEL = 0 
-			) THUMBNAIL
+	SELECT
+		BOARD_NO,
+		BOARD_TITLE,
+		BOARD_WRITER,
+		
+		NICK_NAME,
+		COUNT,
+		B.CREATE_DATE,
+		(
+			SELECT CHANGE_NAME FROM BOARD_IMG
+			WHERE BOARD_NO = REF_BNO AND IMG_LEVEL = 0 
+		) THUMBNAIL
 	FROM BOARD B
 	JOIN MEMBER ON USER_NO = BOARD_WRITER
 	WHERE B.STATUS = 'Y' AND BOARD_CD = #{boardCode}
 	ORDER BY B.CREATE_DATE DESC
 </select>
 
-<select id="selectBoardKeywordList" parameterType="map" resultMap="boardResultSet">
-	
-	SELECT BOARD_NO, 
-			BOARD_TITLE,
-			BOARD_WRITER,
-			
-			NICK_NAME, 
-			COUNT, 
-			CREATE_DATE,
-			(
-				SELECT CHANGE_NAME 
-				FROM BOARD_IMG
-				WHERE BOARD_NO = REF_BNO AND IMG_LEVEL = 0 
-			) THUMBNAIL
+<select id="searchBoardList" resultMap="boardResultSet">
+	SELECT
+		BOARD_NO,
+		BOARD_TITLE,
+		BOARD_WRITER,
+		
+		NICK_NAME,
+		COUNT,
+		B.CREATE_DATE,
+		(
+			SELECT CHANGE_NAME FROM BOARD_IMG
+			WHERE BOARD_NO = REF_BNO AND IMG_LEVEL = 0 
+		) THUMBNAIL
 	FROM BOARD B
-	<!-- left join으로 오류막기 -->
-	LEFT JOIN MEMBER M ON USER_NO = BOARD_WRITER
+	LEFT JOIN MEMBER ON USER_NO = BOARD_WRITER
 	WHERE B.STATUS = 'Y' AND BOARD_CD = #{boardCode}
-	
-	<if test="keyword != null and keyword != '' ">
-		<bind name="pattern" value="'%'+ _parameter.get('keyword') + '%'"/>
-		AND
-		<if test="condition == 'writer' ">
-			 M.NICK_NAME LIKE #{pattern}
-		</if>
-		<if test="condition == 'title' ">
-		 	BOARD_TITLE LIKE #{pattern}
-		</if>
-		<if test="condition == 'content' ">
-			BOARD_CONTENT LIKE #{pattern}
-		</if>
-		<if test="condition == 'titleAndContent' ">
-			(
-				BOARD_TITLE LIKE #{pattern}
-				OR
-				BOARD_CONTENT LIKE #{pattern}
-			)
-		</if>
+	<if test='keyword != null and keyword != ""'>
+		AND 
+		<choose>
+			<when test='condition == "writer"'>
+				NICK_NAME LIKE '%' || #{keyword} || '%'
+			</when>
+			<when test='condition == "title"'>
+				BOARD_TITLE LIKE CONCAT(CONCAT('%',#{keyword}),'%')
+			</when>
+			<when test='condition == "content"'>
+				BOARD_CONTENT LIKE '%${keyword}%'
+			</when>			
+			<when test='condition == "titleAndContent"'>
+				(
+					BOARD_TITLE LIKE CONCAT(CONCAT('%',#{keyword}),'%') 
+					OR
+					BOARD_CONTENT LIKE '%${keyword}%'
+				)
+			</when>			
+		</choose>	
 	</if>
-	<!-- CONCAT() 사용도 가능 -->
 	ORDER BY B.CREATE_DATE DESC
+	
+	
 </select>
 
 <select id="selectBoardDetail" resultMap="boardDetailResultSet">
-	
-		SELECT 
+	SELECT 
 		BOARD_NO,
 		BOARD_WRITER,
 		NICK_NAME,
 		BOARD_TITLE,
 		COUNT,
 		BOARD_CONTENT,
-		TO_CHAR(B.CREATE_DATE, 'YYYY"년" MM"월" DD"일" HH24:MI:SS') CREATE_DATE,
-		BI.*
+		TO_CHAR(B.CREATE_DATE , 'YYYY"년" MM"월" DD"일" HH24:MI:SS') CREATE_DATE
+		,BI.*
 		FROM BOARD B
 		JOIN MEMBER M ON M.USER_NO = B.BOARD_WRITER
-        LEFT JOIN BOARD_IMG BI ON B.BOARD_NO = BI.REF_BNO
-		WHERE
-		BOARD_NO = #{boardNo} 
+		LEFT JOIN BOARD_IMG BI ON B.BOARD_NO = BI.REF_BNO
+		WHERE 
+		BOARD_NO = #{boardNo}
 </select>
 
 <update id="updateReadCount">
-	UPDATE BOARD
-	SET COUNT = COUNT+1
+	UPDATE BOARD SET
+	COUNT = COUNT +1
 	WHERE BOARD_NO = #{boardNo}
 </update>
 
 <insert id="insertBoard" useGeneratedKeys="true" parameterType="board">
-
+	
 	<selectKey keyProperty="boardNo" resultType="_int" order="BEFORE">
 		SELECT SEQ_BNO.NEXTVAL FROM DUAL
 	</selectKey>
-
+	
 	INSERT INTO BOARD(
 		BOARD_NO,
 		BOARD_TITLE,
 		BOARD_WRITER,
 		BOARD_CONTENT,
 		BOARD_CD
-	) VALUES ( 
+	) VALUES (
 		#{boardNo},
 		#{boardTitle},
 		#{boardWriter},
 		#{boardContent},
 		#{boardCd}
 	)
+
 </insert>
 
-<insert id="insertBoardImgList" parameterType="List">
+<insert id="insertBoardImgList" parameterType="list">
 	INSERT INTO BOARD_IMG
-	SELECT SEQ_IMG_NO.NEXTVAL AS IMG_NO, C.* FROM
+	SELECT SEQ_IMG_NO.NEXTVAL AS IMG_NO , C.* FROM
 	(
 		<foreach collection="list" item="img" separator="UNION ALL">
-			SELECT 
+			SELECT
 				#{img.originName} as ORIGIN_NAME,
 				#{img.changeName} as CHANGE_NAME,
 				#{img.refBno} as REF_BNO,
 				#{img.imgLevel} as IMG_LEVEL
-			FROM DUAL
-		</foreach>
-	) C 
-	
-	<!-- inner table -->
-	
-	
+			FROM DUAL	
+		</foreach>	
+	) C
+
+
 </insert>
 
 <!-- 게시글 수정 -->
 <update id="updateBoard" parameterType="board">
-	UPDATE BOARD 
-	SET BOARD_TITLE = #{boardTitle},
+	UPDATE BOARD SET
+	BOARD_TITLE = #{boardTitle},
 	BOARD_CONTENT = #{boardContent}
 	WHERE BOARD_NO = #{boardNo}
 </update>
 
-<!-- 게시글 이미지 수정하는 부분(1개 단위로 수정) -->
+<!-- 게시글 이미지 수정하는 부분 (1개 단위로 수정) -->
 <update id="updateBoardImg" parameterType="boardImg">
-	UPDATE BOARD_IMG
-	SET ORIGIN_NAME = #{originName},
+	UPDATE BOARD_IMG SET
+	ORIGIN_NAME = #{originName},
 	CHANGE_NAME = #{changeName}
 	WHERE REF_BNO = #{refBno} AND IMG_LEVEL = #{imgLevel}
 </update>
@@ -260,21 +263,25 @@
 	DELETE FROM BOARD_IMG
 	WHERE REF_BNO = #{boardNo}
 	AND IMG_LEVEL IN (
-		${deleteList} <!-- 0,1,2,3 -->
+		${deleteList}		 
 	)
 </delete>
 
-<select id="selectAllFileList" resultType="String">
-	SELECT CHANGE_NAME
-	FROM BOARD_IMG
-	ORDER BY BOARD_IMG_NO
+<select id="selectFileList" resultType="string">
+	SELECT
+		CHANGE_NAME
+	FROM BOARD_IMG	
 </select>
 
 
-<delete id="deleteFile" parameterType="String">
-	DELETE FROM BOARD_IMG
-	WHERE CHANGE_NAME = ${i};
-</delete>
+
+
+
+
+
+
+
+
 
 
 </mapper>

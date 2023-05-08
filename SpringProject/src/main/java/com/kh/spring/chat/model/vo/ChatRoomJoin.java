@@ -6,5 +6,4 @@ import lombok.Data;
 public class ChatRoomJoin {
 	private int userNo;
 	private int chatRoomNo;
-	
 }

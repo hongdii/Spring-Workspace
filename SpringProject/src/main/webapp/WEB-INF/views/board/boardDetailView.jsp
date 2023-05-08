@@ -160,9 +160,9 @@
 							data : {
 								refBno : '${b.boardNo}',
 								replyContent: $("#replyContent").val(),
-								replyWriter : '${loginUser.userNo}'
+								replyWriter : '${loginUser.userNo}'								
 							},
-							type: 'POST',
+							type : 'POST',
 							success : function (result){
 								if(result == "1"){
 									alertify.alert("서비스 요청 성공", '댓글 등록 성공' );

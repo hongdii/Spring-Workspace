@@ -13,20 +13,20 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.kh.spring.member.model.vo.Member;
 
 public class LoggingInterceptor extends HandlerInterceptorAdapter{
-
+	
 	static Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
-	// 사용자가 사용하고있는 핸드폰 종류
-	static String logMP[] = {"iphone", "ipad", "android", "blackberry", "opera mobi"};
-	/*
-	 * 모든 경로로 들어오는 요청정보에 대한 로그정보를 남기기위한 메소드
-	 */
+	//사용자가 사용하고있는 핸드폰 종류
+	static String logMP[] = {"iphone","ipod","andriod","blackberry","opera mobi"};
+	/* 
+	 * 모든 경로로들어오는 요청정보에 대한 로그정보를 남기기위한 메소드
+	 * */
 	
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
-		// 접속된 장비가 무엇인지(웹인지, 모바일인지)
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,Object handler) throws Exception{
+		// 접속된 장비가 무었인지(웹인지 ,모바일인지)
 		String currentDevice = "web";
 		String logUA = request.getHeader("user-agent").toLowerCase();
-		for( String device : logMP) {
+		for(String device  : logMP) {
 			if(logUA.indexOf(device) > -1) {
 				currentDevice = "mobile";
 				break;
@@ -45,46 +45,45 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter{
 			queryString = request.getQueryString();
 		}else {
 			Map map = request.getParameterMap();
-			Object[] keys = map.keySet().toArray(); // 객체 배열로 만들어줌
-			for(int i=0; i< keys.length ; i++) {
-				if(i > 0) {
+			Object[] keys = map.keySet().toArray();
+			for(int i =0; i<keys.length; i++) {
+				if(i>0) {
 					queryString += "&";
 				}
-				String[] values = (String[]) map.get(keys[i]);
+				String [] values= (String[]) map.get(keys[i]);
 				queryString += keys[i]+"=";
-				int count = 0;
-				for( String str : values) {
+				int count =0;
+				for(String str : values) {
 					if(count > 0) {
 						queryString += ",";
 					}
 					queryString += str;
 					count++;
 				}
-			}
+			}			
 		}
 		
-		// 파라미터가 아예 없다면 , 애초에 로그 정보에 포함시키지 않을 예정임.
+		// 파라미터가 아예 없다면 , 애초에 로그에정보에 포함시키지 않을예정임.
 		if(queryString == null || queryString.trim().length() == 0) {
 			queryString = null;
 		}
 		
-		// ip 정보 추가
+		// ip정보 추가
 		String uri = request.getRequestURI();
 		String ip = getIp(request);
 		
 		// 프로토콜 정보 추가 s == secure
 		String protocol = (request.isSecure()) ? "https" : "http";
 		
-		// 아이디 정보 추가
+		//아이디 정보 추가
 		String userId = "";
-		Member user = (Member) session.getAttribute("loginUser");
+		Member user = (Member)session.getAttribute("loginUser");
 		if(user != null) {
 			userId = user.getUserId();
 		}
 		
 		logger.info(ip+":"+currentDevice+":"+userId+":"+protocol+"://"+currentDomain+":"+currentPort+uri+
-					(queryString != null ? "?"+queryString : "")); // queryString 의 시작은 무조건 ?로 시작함
-		
+				(queryString != null ? "?"+queryString : "" ));
 		return true;
 	}
 	
@@ -108,9 +107,6 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter{
 		}
 		return ip;
 	}
-	
-	
-	
 	
 	
 	

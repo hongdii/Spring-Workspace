@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.kh.spring.member.model.vo.Member;
 
-/*
+/* 
  * Service Interface 사용하는 이유
  * 
  * 1. 프로젝트에 규칙성을 부여하기 위해서
@@ -14,14 +14,25 @@ import com.kh.spring.member.model.vo.Member;
  * 3. Spring AOP를 위해서 필요
  * 
  */
-
 public interface MemberService {
 	
 	public abstract Member loginMember(Member inputMember);
 	
 	public abstract int insertMember(Member inputMember);
-	
+
 	public abstract ArrayList<Member> selectAll();
 	
 	void updateMemberChangePwd();
 }
+
+
+
+
+
+
+
+
+
+
+
+

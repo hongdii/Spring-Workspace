@@ -5,14 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kh.spring.board.model.dao.ReplyDao;
+import com.kh.spring.board.model.dao.ReplyDAO;
 import com.kh.spring.board.model.vo.Reply;
 
 @Service
 public class ReplyServiceImpl implements ReplyService{
 	
 	@Autowired
-	private ReplyDao dao;
+	private ReplyDAO dao;
+	
 	
 	public int insertReply(Reply reply) {
 		return dao.insertReply(reply);
@@ -21,4 +22,6 @@ public class ReplyServiceImpl implements ReplyService{
 	public List<Reply> selectReplyList(int bno){
 		return dao.selectReplyList(bno);
 	}
+	
+	
 }

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="chattingMapper">
+	
 	<resultMap type="chatRoom" id="chatRoomResultSet">
-		<result column="CHAT_ROOM_NO" property="chatRoomNo"/>
+		<result property="chatRoomNo" column="CHAT_ROOM_NO"/>
 		
-		<result column="TITLE" property="title"/>
-		<result column="NICK_NAME" property="nickName"/>
-		<result column="CNT" property="cnt"/>
-	
-		<result column="USER_NO" property="userNo"/>
-		<result column="STATUS" property="status"/>
-	
+		<result property="title" column="TITLE"/>
+		<result property="nickName" column="NICK_NAME"/>
+		<result property="cnt" column="CNT"/>
+		
+		<result property="userNo" column="USER_NO"/>
+		<result property="chatRoomNo" column="STATUS"/>
 	</resultMap>
 	
 	<resultMap type="chatMessage" id="chatMessageResultSet">
@@ -28,43 +28,40 @@
 			CHAT_ROOM_NO,
 			TITLE,
 			NICK_NAME,
-			( SELECT COUNT(*) FROM CHAT_ROOM_JOIN B WHERE B.CHAT_ROOM_NO = A.CHAT_ROOM_NO) CNT
-		FROM CHAT_ROOM A
+			(SELECT COUNT(*) FROM CHAT_ROOM_JOIN B WHERE B.CHAT_ROOM_NO = A.CHAT_ROOM_NO ) CNT
+		FROM CHAT_ROOM A 
 		JOIN MEMBER M USING(USER_NO)
 		WHERE A.STATUS = 'Y'
 		ORDER BY CHAT_ROOM_NO DESC
-	
 	</select>
-
+	
 	<insert id="openChatRoom" useGeneratedKeys="true">
-		
 		<selectKey keyProperty="chatRoomNo" resultType="int" order="BEFORE">
 			SELECT SEQ_CR_NO.NEXTVAL FROM DUAL
 		</selectKey>
 		
 		INSERT INTO CHAT_ROOM VALUES
-		(#{chatRoomNo}, #{title}, DEFAULT, #{userNo})
-		
+		(#{chatRoomNo} , #{title}, DEFAULT,#{userNo}) 
 	</insert>
-
+	
 	<!-- 채팅방 참여여부 확인 -->
-	<select id="joinCheck" parameterType="chatRoomJoin" resultType="_int">
+	<select id="joinCheck" resultType="_int" parameterType="chatRoomJoin">
 		SELECT COUNT(*)
 		FROM CHAT_ROOM_JOIN
 		WHERE CHAT_ROOM_NO = #{chatRoomNo}
-			AND USER_NO = #{userNo}
-	</select>
-
+		  AND USER_NO = #{userNo}
+	</select>	
+	
 	<!-- 채팅방 참여하기 -->
 	<insert id="joinChatRoom" parameterType="chatRoomJoin">
 		INSERT INTO CHAT_ROOM_JOIN
-		VALUES (#{userNo}, #{chatRoomNo})
+		VALUES (#{userNo} , #{chatRoomNo})
 	</insert>
 	
 	<!-- 채팅 메세지 목록 조회 -->
 	<select id="selectChatMessage" resultMap="chatMessageResultSet">
 		SELECT 
-			MESSAGE, 
+			MESSAGE,
 			CREATE_DATE,
 			USER_NO,
 			NICK_NAME
@@ -73,25 +70,25 @@
 		WHERE CHAT_ROOM_NO = #{chatRoomNo}
 		ORDER BY CM_NO
 	</select>
-
+	
 	<!-- 채팅 메세지 삽입 -->
 	<insert id="insertMessage" parameterType="chatMessage">
 		INSERT INTO CHAT_MESSAGE
-		VALUES (SEQ_CM_NO.NEXTVAL, #{message}, DEFAULT, #{chatRoomNo}, #{userNo})
+		VALUES (SEQ_CM_NO.NEXTVAL, #{message}, DEFAULT, #{chatRoomNo},#{userNo})
 	</insert>
-
+	
 	<!-- 채팅방 나가기 -->
 	<delete id="exitChatRoom" parameterType="chatRoomJoin">
 		DELETE FROM CHAT_ROOM_JOIN
-		WHERE USER_NO = #{userNo}
-			AND CHAT_ROOM_NO = #{chatRoomNo} 
+		WHERE USER_NO = #{userNo} 
+		  AND CHAT_ROOM_NO = #{chatRoomNo}
 	</delete>
-
+	
 	<!-- 채팅방 인원 수 확인 -->
 	<select id="countChatRoomMember" resultType="_int">
 		SELECT
 			COUNT(*)
-		FROM CHAT_ROOM_JOIN
+		FROM  CHAT_ROOM_JOIN
 		WHERE CHAT_ROOM_NO = #{chatRoomNo}
 	</select>
 	
@@ -101,14 +98,15 @@
 		STATUS = 'N'
 		WHERE CHAT_ROOM_NO = #{chatRoomNo}
 	</update>
-
-
-
-
-
-
-
-
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </mapper>
-
