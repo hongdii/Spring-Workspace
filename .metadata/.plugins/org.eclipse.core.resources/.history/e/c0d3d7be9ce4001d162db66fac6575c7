@@ -1,8 +1,0 @@
-package com.kh.spring.member.model.service;
-
-import org.springframework.stereotype.Service;
-
-@Service // 현재 클래스가 Service임을 명시 + bean으로 등록
-public class MemberServiceImpl implements MemberService{
-
-}

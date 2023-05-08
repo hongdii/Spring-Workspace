@@ -23,4 +23,5 @@ public interface MemberService {
 	
 	public abstract ArrayList<Member> selectAll();
 	
+	void updateMemberChangePwd();
 }

@@ -1,5 +1,6 @@
 package com.kh.spring.board.model.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -215,10 +216,14 @@ public class BoardServiceImpl implements BoardService{
 		return result;
 	}
 	
-	
-	
-	
-	
+	public ArrayList<String> selectAllFileList(){
+		
+		return boardDao.selectAllFileList();
+	};
+
+	public int deleteFile(String i) {
+		return boardDao.deleteFile(i);
+	};
 	
 	
 	

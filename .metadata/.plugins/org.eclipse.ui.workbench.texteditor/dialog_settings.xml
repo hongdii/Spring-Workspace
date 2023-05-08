@@ -8,21 +8,21 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="1) 게시판 이름"/>
-			<item value="true"/>
-			<item value="&quot;common/error"/>
-			<item value="암호화 후"/>
-			<item value="selectChatRoomList"/>
-			<item value="chatRoom"/>
-			<item value="insertReply"/>
-			<item value="info"/>
-			<item value="sql-console"/>
-			<item value="&lt;appender name=&quot;sql-console&quot; class=&quot;org.apache.log4j.ConsoleAppender&quot;&gt;"/>
-			<item value="l"/>
-			<item value="log4j"/>
-			<item value="ref_bno"/>
-			<item value="TITLE"/>
-			<item value="changeName"/>
+			<item value="spring-quartz"/>
+			<item value="${org."/>
+			<item value="String"/>
+			<item value="File"/>
+			<item value="BoardImgResultSet"/>
+			<item value="selectBoardTypeList"/>
+			<item value="boardDetailResultSet"/>
+			<item value="selectBoardDetail"/>
+			<item value="selectBoard"/>
+			<item value="jack"/>
+			<item value="Jack"/>
+			<item value="@ModelAttribute"/>
+			<item value=""/>
+			<item value="문자"/>
+			<item value="chatRoomNo"/>
 		</list>
 		<list key="replacehistory">
 			<item value="${contextPath }"/>

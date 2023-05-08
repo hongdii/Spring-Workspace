@@ -87,8 +87,13 @@ public class BoardDao {
 				
 	}
 	
+	public ArrayList<String> selectAllFileList(){
+		return (ArrayList) sqlSession.selectList("boardMapper.selectAllFileList");
+	}
 	
-	
+	public int deleteFile(String i) {
+		return sqlSession.delete("boardMapper.deleteFile", i);
+	}
 	
 
 }

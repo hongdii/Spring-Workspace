@@ -53,5 +53,10 @@ public class MemberServiceImpl implements MemberService{
 		ArrayList<Member> list = memberDao.selectAll();
 		return list;
 	}
+	
+	@Override
+	public void updateMemberChangePwd() {
+		memberDao.updateMemberChangePwd();
+	}
 
 }

@@ -31,9 +31,10 @@
 	<result column="USER_NO" property="userNo" />
 	<result column="PROFILE_IMG" property="profileImage"/>
 	
-	<collection property="imgList" javaType="java.util.ArrayList" ofType="boardImg" 
+	<!-- 방법1 -->
+	<!-- <collection property="imgList" javaType="java.util.ArrayList" ofType="boardImg" 
 		select="selectImgList" column="BOARD_NO" />
-	<!-- 
+ -->	<!-- 
 		selectImgList의 조회결과를 Board VO 클래스의 imgList필드에 담겠다. 라는 의미
 		
 		-> imgList에 담기위한 ArrayList<BoardImg>객체를 생성하겠다.
@@ -47,6 +48,9 @@
 		
 	 -->
 	
+	<!-- 방법2 -->
+	<collection property="imgList" resultMap="boardImgResultSet"/>
+	
 </resultMap>
 
 <resultMap id="boardImgResultSet" type="boardImg">
@@ -57,7 +61,6 @@
 	<result column="IMG_LEVEL" property="imgLevel"/>
 	
 </resultMap>
-
 
 <select id="selectImgList" resultMap="boardImgResultSet">
 	SELECT *
@@ -163,20 +166,21 @@
 </select>
 
 <select id="selectBoardDetail" resultMap="boardDetailResultSet">
-	SELECT 
+	
+		SELECT 
 		BOARD_NO,
 		BOARD_WRITER,
 		NICK_NAME,
 		BOARD_TITLE,
 		COUNT,
 		BOARD_CONTENT,
-		TO_CHAR(B.CREATE_DATE, 'YYYY"년" MM"월" DD"일" HH24:MI:SS') CREATE_DATE
-		
+		TO_CHAR(B.CREATE_DATE, 'YYYY"년" MM"월" DD"일" HH24:MI:SS') CREATE_DATE,
+		BI.*
 		FROM BOARD B
 		JOIN MEMBER M ON M.USER_NO = B.BOARD_WRITER
-		<!-- LEFT_JOIN BOARD_IMG BI ON B.BOARD_NP = BI.REF_BNO -->
+        LEFT JOIN BOARD_IMG BI ON B.BOARD_NO = BI.REF_BNO
 		WHERE
-		BOARD_NO = #{boardNo}
+		BOARD_NO = #{boardNo} 
 </select>
 
 <update id="updateReadCount">
@@ -260,11 +264,17 @@
 	)
 </delete>
 
+<select id="selectAllFileList" resultType="String">
+	SELECT CHANGE_NAME
+	FROM BOARD_IMG
+	ORDER BY BOARD_IMG_NO
+</select>
 
 
-
-
-
+<delete id="deleteFile" parameterType="String">
+	DELETE FROM BOARD_IMG
+	WHERE CHANGE_NAME = ${i};
+</delete>
 
 
 </mapper>
