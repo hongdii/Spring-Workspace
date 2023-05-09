@@ -4,6 +4,9 @@
 	
 	<resultMap type="reply" id="replyResultSet">
 		<result column="REPLY_NO" property="replyNo"/>
+		
+		<result column="USER_NO" property="userNo" />
+		
 		<result column="REPLY_CONTENT" property="replyContent"/>
 		<result column="REF_BNO" property="refBno"/>
 		<result column="REPLY_WRITER" property="replyWriter"/>
@@ -32,14 +35,27 @@
 			REF_BNO,
 			NICK_NAME AS REPLY_WRITER,
 			R.CREATE_DATE,
-			R.STATUS
+			R.STATUS,
+			
+			USER_NO
+			
 			FROM REPLY R
 			JOIN MEMBER M ON R.REPLY_WRITER = M.USER_NO
 			WHERE REF_BNO = #{bno} AND R.STATUS = 'Y'
 	</select>
 	
+	<update id="deleteReply" parameterType="_int">
+		UPDATE REPLY SET
+		STATUS = 'N'
+		WHERE REPLY_NO = #{replyNo}
+	</update>
 	
+	<update id="updateReply" parameterType="reply">
+		UPDATE REPLY SET
+		REPLY_CONTENT = #{replyContent}
+		WHERE REPLY_NO = #{replyNo}
 	
+	</update>
 	
 	
 	

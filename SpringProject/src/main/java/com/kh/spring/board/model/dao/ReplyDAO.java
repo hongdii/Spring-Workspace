@@ -22,7 +22,13 @@ public class ReplyDAO {
 		return sqlSession.selectList("replyMapper.selectReplyList",bno);
 	}
 	
+	public int deleteReply(int replyNo) {
+		return sqlSession.update("replyMapper.deleteReply", replyNo);
+	}
 	
+	public int updateReply(Reply reply) {
+		return sqlSession.update("replyMapper.updateReply", reply);
+	}
 	
 	
 	
