@@ -20,6 +20,7 @@ public class AfterReturninTest {
 	// @AfterReturning : 메서드 실행 이후에 반환값을 얻어오는 기능의 어노테이션
 	// returning : 반환값을 저장할 매개변수명을 지정하는 속성
 	@AfterReturning(pointcut = "CommonPointcut.implPointcut()" , returning = "returnObj")
+	//  returning="returnObj" 과 returnValue()의 Object returnObj은 동일해야한다.
 	public void returnValue(JoinPoint jp, Object returnObj) { // 순서 바뀌면 안됨
 		
 		// returnObj 반환값이 Member 인가?

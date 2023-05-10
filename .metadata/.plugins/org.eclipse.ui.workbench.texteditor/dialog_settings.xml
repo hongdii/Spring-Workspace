@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value=""/>
+		<item key="selection" value="createDate"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="createDate"/>
+			<item value="ModelAndView"/>
+			<item value="JoinPoint"/>
+			<item value="implPointcut"/>
+			<item value="AfterReturninTest"/>
+			<item value="pointcut"/>
+			<item value="select"/>
+			<item value="CommonPointcut"/>
+			<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;"/>
 			<item value="spring-quartz"/>
 			<item value="${org."/>
 			<item value="String"/>
 			<item value="File"/>
 			<item value="BoardImgResultSet"/>
 			<item value="selectBoardTypeList"/>
-			<item value="boardDetailResultSet"/>
-			<item value="selectBoardDetail"/>
-			<item value="selectBoard"/>
-			<item value="jack"/>
-			<item value="Jack"/>
-			<item value="@ModelAttribute"/>
-			<item value=""/>
-			<item value="문자"/>
-			<item value="chatRoomNo"/>
 		</list>
 		<list key="replacehistory">
 			<item value="${contextPath }"/>
