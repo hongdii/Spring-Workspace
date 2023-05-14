@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.springframework.validation.annotation.Validated"/>
     <fullyQualifiedTypeName name="lombok.Data"/>
-    <fullyQualifiedTypeName name="org.springframework.stereotype.Controller"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.SessionAttributes"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
     <fullyQualifiedTypeName name="com.kh.spring.chat.model.dao.ChatDAO"/>
@@ -36,7 +34,6 @@
     <fullyQualifiedTypeName name="com.kh.spring.board.model.vo.BoardImg"/>
     <fullyQualifiedTypeName name="java.io.File"/>
     <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="org.springframework.scheduling.quartz.QuartzJobBean"/>
     <fullyQualifiedTypeName name="org.quartz.JobExecutionContext"/>
     <fullyQualifiedTypeName name="org.quartz.JobExecutionException"/>
     <fullyQualifiedTypeName name="org.aspectj.lang.annotation.Pointcut"/>
@@ -60,4 +57,7 @@
     <fullyQualifiedTypeName name="org.slf4j.Logger"/>
     <fullyQualifiedTypeName name="org.aspectj.lang.annotation.AfterThrowing"/>
     <fullyQualifiedTypeName name="org.aspectj.lang.JoinPoint"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Controller"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.scheduling.quartz.QuartzJobBean"/>
 </qualifiedTypeNameHistroy>
